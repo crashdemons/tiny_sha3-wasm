@@ -2443,8 +2443,10 @@ var sha3 = {
     final: function(contextObject){
         var digestByteLen = contextObject.digest_size / 8;
         var digestBuffer = this.internal.create_buffer(digestByteLen);
+        console.log("create buffer "+digestBuffer)
         this.internal.final(contextObject.context,digestBuffer,digestByteLen);
         var digestBytes = this.internal.bytesFromBuffer(digestBuffer, digestByteLen);
+        console.log("destroying buffer "+digestBuffer)
         this.internal.destroy_buffer(digestBuffer);
         return digestBytes;
     },
