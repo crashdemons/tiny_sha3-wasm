@@ -1,12 +1,33 @@
 // main.c
 // 19-Nov-11  Markku-Juhani O. Saarinen <mjos@iki.fi>
 
+
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
 #include "sha3.h"
 
 // read a hex string, return byte length or -1 on error.
+
+void test_sha3_api(){
+	sha3_ctx_t* ctx = sha3_init_stub(64);
+
+	const char* input = "test";
+	void* inbuf = create_buffer(strlen(input)*sizeof(char));
+
+	sha3_update(ctx, inbuf, strlen(input));
+
+	uint8_t* outbuf = create_buffer(64);
+
+	sha3_final(outbuf, ctx);
+
+	sha3_cleanup_stub(ctx);
+
+	for(int i = 0 ; i<64; i++){
+		printf("%d ", outbuf[i]);
+	}
+}
+
 
 static int test_hexdigit(char ch)
 {
@@ -40,6 +61,7 @@ static int test_readhex(uint8_t *buf, const char *str, int maxbytes)
 
 int test_sha3()
 {
+	test_sha3_api();
     // message / digest pairs, lifted from ShortMsgKAT_SHA3-xxx.txt files
     // in the official package: https://github.com/gvanas/KeccakCodePackage
 

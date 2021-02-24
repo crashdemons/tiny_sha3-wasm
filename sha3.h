@@ -1,9 +1,10 @@
 // sha3.h
 // 19-Nov-11  Markku-Juhani O. Saarinen <mjos@iki.fi>
 
-#include "emscripten.h"
 
-#ifndef EMSCRIPTEN_KEEPALIVE
+#ifdef __EMSCRIPTEN__
+#include "emscripten.h"
+#else
 #define EMSCRIPTEN_KEEPALIVE
 #endif
 
@@ -13,6 +14,7 @@
 #include <stddef.h>
 #include <stdint.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
 
 #ifndef KECCAKF_ROUNDS

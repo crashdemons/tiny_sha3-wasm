@@ -6,7 +6,7 @@ OBJS     	= sha3.o main.o
 DIST            = tiny_sha3
 
 CC              = gcc
-CFLAGS		= -Wall -O3
+CFLAGS		= -g -Wall -O3
 LIBS            =
 LDFLAGS         =
 INCLUDES	=
