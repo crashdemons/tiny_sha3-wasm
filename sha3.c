@@ -8,6 +8,7 @@
 
 // update the state with given number of rounds
 
+EMSCRIPTEN_KEEPALIVE
 int version(){
 	return 20150903;
 }
