@@ -10,22 +10,35 @@
 // read a hex string, return byte length or -1 on error.
 
 void test_sha3_api(){
-	sha3_ctx_t* ctx = sha3_init_stub(64);
+	sha3_ctx_t* ctx = sha3_init_stub(512/8);
 
 	const char* input = "test";
 	void* inbuf = create_buffer(strlen(input)*sizeof(char));
+	memcpy(inbuf,input,strlen(input)*sizeof(char));
 
 	sha3_update(ctx, inbuf, strlen(input));
 
-	uint8_t* outbuf = create_buffer(64);
+	uint8_t* outbuf = create_buffer(512/8);
 
 	sha3_final(outbuf, ctx);
 
 	sha3_cleanup_stub(ctx);
 
-	for(int i = 0 ; i<64; i++){
+	for(int i = 0 ; i<512/8; i++){
 		printf("%d ", outbuf[i]);
 	}
+
+// vs default method
+    int mdlen = 512/8;
+    uint8_t* outbuf2 = create_buffer(64);
+    sha3_ctx_t sha3;
+    sha3_init(&sha3, mdlen);
+    sha3_update(&sha3, inbuf, strlen(input));
+    sha3_final(outbuf2, &sha3);
+	for(int i = 0 ; i<512/8; i++){
+		printf("%d ", outbuf2[i]);
+	}
+
 }
 
 

@@ -132,6 +132,7 @@ void sha3_keccakf(uint64_t st[25])
 
 int sha3_init(sha3_ctx_t *c, int mdlen)
 {
+    printf("sha3_init : mdlen %d, lim 25\r\n",mdlen);
     int i;
 
     for (i = 0; i < 25; i++)
@@ -168,7 +169,7 @@ int sha3_update(sha3_ctx_t *c, const void *data, size_t len)
 
 int sha3_final(void *md, sha3_ctx_t *c)
 {
-	printf("sha3_final %d\r\n",c->mdlen);
+    printf("sha3_final %d\r\n",c->mdlen);
     int i;
 
     c->st.b[c->pt] ^= 0x06;
