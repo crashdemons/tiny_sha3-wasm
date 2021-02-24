@@ -1,6 +1,8 @@
 # tiny_sha3
 Very small, readable implementation of the FIPS 202 and SHA3 hash function.
-Public domain.
+Public domain.  Rebuilt for Webassembly (WASM) support.
+
+live demo: https://crashdemons.github.io/tiny_sha3-wasm
 
 ### Updated 27-Dec-15:
 
