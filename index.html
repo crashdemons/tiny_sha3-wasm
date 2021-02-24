@@ -56,7 +56,14 @@ async function hashStringDebug(inputText,digestSize){
 
     </head>
     <body>
-        <input type="text" id="input" value="test"><select id="size"><option value="256">Sha3-256</option><option value="512" selected="selected">Sha3-512</option></select><button onclick="clickHash()">Calculate Hash</button>
+        <input type="text" id="input" value="test">
+        <select id="size">
+            <option value="224">Sha3-224</option>
+            <option value="256">Sha3-256</option>
+            <option value="384">Sha3-384</option>
+            <option value="512" selected="selected">Sha3-512</option>
+        </select>
+        <button onclick="clickHash()">Calculate Hash</button>
         <hr>
         <div id="results"></div>
         <hr>

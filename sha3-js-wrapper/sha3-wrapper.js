@@ -51,8 +51,21 @@ var sha3 = {
      * @return {Object} the context object for this hashing session. should only be used to hash one data source.
      */
     init: function(digest_size){
-        if(typeof digest_size==="undefined") digest_size = 512;
-        digest_size = (+digest_size) === 256 ? 256 : 512;//only two choices!
+        
+        if(typeof digest_size==="undefined"){
+            digest_size = 512/8;
+        }else{
+            digest_size = (+digest_size)/8;
+        }
+        switch(digest_size){
+            case 224/8:
+            case 256/8:
+            case 384/8:
+            case 512/8:
+                break;
+            default:
+                digest_size = 512/8;
+        }
         return {
             digest_size : digest_size,
             context: this.internal.init(digest_size)
@@ -81,16 +94,18 @@ var sha3 = {
     
     /**
      * Finalizes the hashing session and produces digest ("hash") bytes.
-     * Size of the returned array is always digest_size/8 bytes long.
+     * Size of the returned array is always digest_size bytes long.
      * This method does not clean up the hashing context - be sure to call cleanup(ctx)!
      * @param {Object} contextObject the context object for this hashing session
      * @return {Uint8Array} an array of bytes representing the raw digest ("hash") value.
      */
     final: function(contextObject){
-        var digestByteLen = contextObject.digest_size / 8;
+        var digestByteLen = contextObject.digest_size;
         var digestBuffer = this.internal.create_buffer(digestByteLen);
         console.log("create buffer "+digestBuffer)
-        this.internal.final(contextObject.context,digestBuffer,digestByteLen);
+        //this.internal.final(contextObject.context,digestBuffer,digestByteLen);
+        this.internal.final(digestBuffer,contextObject.context);
+        
         var digestBytes = this.internal.bytesFromBuffer(digestBuffer, digestByteLen);
         console.log("destroying buffer "+digestBuffer)
         this.internal.destroy_buffer(digestBuffer);
@@ -102,7 +117,7 @@ var sha3 = {
      * @param {Object} contextObject the context object for this hashing session
      */
     cleanup: function(contextObject){
-        this.internal.cleanup(contextObject.context);
+        //this.internal.cleanup(contextObject.context);
     },
     
     /**
@@ -136,9 +151,9 @@ createSha3Module().then(async module => {
     sha3.version= module.cwrap('version', 'number', []);
     sha3.internal.create_buffer= module.cwrap('create_buffer', 'number', ['number']);
     sha3.internal.destroy_buffer= module.cwrap('destroy_buffer', '', ['number']);
-    sha3.internal.init= module.cwrap('sha3_init', 'number', ['number']);
-    sha3.internal.update= module.cwrap('sha3_update', '', ['number','number','number']);
-    sha3.internal.final= module.cwrap('sha3_final', '', ['number','number']);
-    sha3.internal.cleanup= module.cwrap('sha3_cleanup', '', ['number']);
+    sha3.internal.init= module.cwrap('sha3_init_stub', '', ['number']);
+    sha3.internal.update= module.cwrap('sha3_update', 'number', ['number','number','number']);
+    sha3.internal.final= module.cwrap('sha3_final', 'number', ['number','number']);
+    sha3.internal.cleanup= module.cwrap('sha3_cleanup_stub', '', ['number']);
     sha3.internal.module = module;
 });
