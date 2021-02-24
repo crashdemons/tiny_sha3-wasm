@@ -1,0 +1,7 @@
+auto/Makefile
+sha3
+sha3test
+main
+a.out*
+*.o
+/nbproject/private/

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>sha3-wasm example</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+<script src="./sha3-wasm-dist/sha3-wasm.js"></script>
+<script src="./sha3-js-wrapper/sha3-js.js"></script>
+<script>
+window.sha3_wasm = null;
+    
+function buf2hex(buffer) { // buffer is an ArrayBuffer
+  return Array.prototype.map.call(new Uint8Array(buffer), x => ('00' + x.toString(16)).slice(-2)).join('');
+}
+function debugClear(){
+     var results = document.getElementById('results');
+     results.innerHTML="";
+}
+function debug(s){
+    var results = document.getElementById('results')
+    console.log(s)
+    
+    var entry = document.createElement('div');
+    entry.innerText=s;
+    entry.innerHTML+="<br />";
+    
+    results.appendChild(entry);
+}
+
+async function debugBuffer(prefix,pBuffer,nBufLen){
+    const resultView = new Uint8Array(sha3_wasm.module.HEAP8.buffer, pBuffer, nBufLen);
+    const result = new Uint8Array(resultView);
+    await debug("  "+prefix+" = "+buf2hex(result.buffer));
+}
+function clickHash(){
+    var input = document.getElementById('input');
+    var sizeSelect = document.getElementById('size');
+    var digestSize = +(sizeSelect.value);
+    var inputText = input.value;
+    debugClear();
+    if(window.sha3===null){
+        debug("API not ready");
+    }else{
+        debug("API ready");
+        hashStringDebug(inputText,digestSize);
+    }
+}
+async function hashStringDebug(inputText,digestSize){
+    debug("Sha3-wasm library version: "+sha3.version());
+    debug("*Result = "+sha3.digestHex(inputText,digestSize));
+    debug("*Done");
+}
+</script>
+
+    </head>
+    <body>
+        <input type="text" id="input" value="test"><select id="size"><option value="256">Sha3-256</option><option value="512" selected="selected">Sha3-512</option></select><button onclick="clickHash()">Calculate Hash</button>
+        <hr>
+        <div id="results"></div>
+        <hr>
+        <div>Known Sha3-512 result for "test": 7200bf5dea560f0d7960d07fdc8874ad9f3b86ece2e45f5502ae2e176f2c928e0e581152281f5aee818318bed7cbe6aa69999589234723ceb33175598365b5c8</div>
+        <div>Known Sha3-256 result for "test": 12a50838191b5504f1e5f2fd078714cf6b592b9d29af99d0b10d8d02881c3857</div>
+    </body>
+</html>
+
