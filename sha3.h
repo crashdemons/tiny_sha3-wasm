@@ -41,11 +41,13 @@ int version();
 EMSCRIPTEN_KEEPALIVE
 uint8_t* create_buffer(size_t size);
 EMSCRIPTEN_KEEPALIVE
-void destroy_buffer(uint8_t* p);
+void destroy_buffer(void* p);
 
 // OpenSSL - like interfece
 EMSCRIPTEN_KEEPALIVE
 sha3_ctx_t* sha3_init_stub(int mdlen);
+EMSCRIPTEN_KEEPALIVE
+void sha3_cleanup_stub(sha3_ctx_t* ctx);
 
 int sha3_init(sha3_ctx_t *c, int mdlen);    // mdlen = hash output in bytes
 

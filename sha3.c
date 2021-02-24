@@ -16,7 +16,7 @@ uint8_t* create_buffer(size_t size) {
   return malloc(size * sizeof(uint8_t));
 }
 
-void destroy_buffer(uint8_t* p) {
+void destroy_buffer(void* p) {
   free(p);
 }
 
@@ -25,7 +25,9 @@ sha3_ctx_t* sha3_init_stub(int mdlen){
 	memset(ctx, 0x0, sizeof(sha3_ctx_t));
 	return ctx;
 }
-
+void sha3_cleanup_stub(sha3_ctx_t* ctx){
+	destroy_buffer(ctx);
+}
 
 
 void sha3_keccakf(uint64_t st[25])
