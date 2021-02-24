@@ -1858,6 +1858,10 @@ var ASM_CONSTS = {
       if (Module['extraStackTrace']) js += '\n' + Module['extraStackTrace']();
       return demangleAll(js);
     }
+
+  function _emscripten_memcpy_big(dest, src, num) {
+      HEAPU8.copyWithin(dest, src, src + num);
+    }
 var ASSERTIONS = true;
 
 
@@ -1888,11 +1892,26 @@ function intArrayToString(array) {
 
 
 var asmLibraryArg = {
-  
+  "emscripten_memcpy_big": _emscripten_memcpy_big
 };
 var asm = createWasm();
 /** @type {function(...*):?} */
 var ___wasm_call_ctors = Module["___wasm_call_ctors"] = createExportWrapper("__wasm_call_ctors");
+
+/** @type {function(...*):?} */
+var _version = Module["_version"] = createExportWrapper("version");
+
+/** @type {function(...*):?} */
+var _sha3_init = Module["_sha3_init"] = createExportWrapper("sha3_init");
+
+/** @type {function(...*):?} */
+var _sha3_update = Module["_sha3_update"] = createExportWrapper("sha3_update");
+
+/** @type {function(...*):?} */
+var _sha3_final = Module["_sha3_final"] = createExportWrapper("sha3_final");
+
+/** @type {function(...*):?} */
+var _sha3 = Module["_sha3"] = createExportWrapper("sha3");
 
 /** @type {function(...*):?} */
 var ___errno_location = Module["___errno_location"] = createExportWrapper("__errno_location");
