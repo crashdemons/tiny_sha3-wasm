@@ -13,7 +13,9 @@ int version(){
 }
 
 uint8_t* create_buffer(size_t size) {
-  return malloc(size * sizeof(uint8_t));
+   uint8_t* p = malloc(size * sizeof(uint8_t));
+   memset(p, 0x0, size*sizeof(uint8_t));
+   return p;
 }
 
 void destroy_buffer(void* p) {
