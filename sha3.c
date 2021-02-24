@@ -8,6 +8,10 @@
 
 // update the state with given number of rounds
 
+int version(){
+	return 20150903;
+}
+
 void sha3_keccakf(uint64_t st[25])
 {
     // constants

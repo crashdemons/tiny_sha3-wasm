@@ -31,6 +31,9 @@ typedef struct {
 // Compression function.
 void sha3_keccakf(uint64_t st[25]);
 
+EMSCRIPTEN_KEEPALIVE
+int version();
+
 // OpenSSL - like interfece
 EMSCRIPTEN_KEEPALIVE
 int sha3_init(sha3_ctx_t *c, int mdlen);    // mdlen = hash output in bytes
