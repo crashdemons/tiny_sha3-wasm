@@ -4,6 +4,11 @@ Public domain.  Rebuilt for Webassembly (WASM) support.
 
 live demo: https://crashdemons.github.io/tiny_sha3-wasm
 
+Building WASM
+---
+run `./make-wasm.sh` in your linux shell
+
+
 ### Updated 27-Dec-15:
 
 Added SHAKE128 and SHAKE256 code and test vectors. The code can actually do
