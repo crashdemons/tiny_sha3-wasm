@@ -12,20 +12,14 @@ int version(){
 	return 20150903;
 }
 
-
-static void *
-memalloc(const size_t size)
-{
-	return malloc(size);
+uint8_t* create_buffer(size_t size) {
+  return malloc(size * sizeof(uint8_t));
 }
 
-void* create_buffer(size_t size){
-	return memalloc(size);
+void destroy_buffer(uint8_t* p) {
+  free(p);
 }
 
-void destroy_buffer(void* buffer){
-	free(buffer);
-}
 
 
 void sha3_keccakf(uint64_t st[25])

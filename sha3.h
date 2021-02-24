@@ -38,9 +38,9 @@ void sha3_keccakf(uint64_t st[25]);
 EMSCRIPTEN_KEEPALIVE
 int version();
 EMSCRIPTEN_KEEPALIVE
-void* create_buffer(size_t size);
+uint8_t* create_buffer(size_t size);
 EMSCRIPTEN_KEEPALIVE
-void destroy_buffer(void* buffer);
+void destroy_buffer(uint8_t* p);
 
 // OpenSSL - like interfece
 EMSCRIPTEN_KEEPALIVE
