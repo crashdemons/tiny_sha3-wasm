@@ -13,7 +13,7 @@ int version(){
 }
 
 uint8_t* create_buffer(size_t size) {
-	printf("create_buffer : %ld %ld\r\n", size, size*sizeof(uint8_t));
+//	printf("create_buffer : %ld %ld\r\n", size, size*sizeof(uint8_t));
    uint8_t* p = malloc(size * sizeof(uint8_t));
    memset(p, 0x0, size*sizeof(uint8_t));
    return p;
@@ -24,14 +24,14 @@ void destroy_buffer(void* p) {
 }
 
 sha3_ctx_t* sha3_init_stub(int mdlen){
-	printf("sha3_init_stub %d : sizeof sha3_ctx_t: %ld\r\n",mdlen, sizeof(sha3_ctx_t));
+//	printf("sha3_init_stub %d : sizeof sha3_ctx_t: %ld\r\n",mdlen, sizeof(sha3_ctx_t));
 	sha3_ctx_t* ctx = (sha3_ctx_t*) create_buffer(sizeof(sha3_ctx_t));
 	memset(ctx, 0x0, sizeof(sha3_ctx_t));
 	sha3_init(ctx,mdlen);
 	return ctx;
 }
 void sha3_cleanup_stub(sha3_ctx_t* ctx){
-	printf("sha3_cleanup_stub\r\n");
+//	printf("sha3_cleanup_stub\r\n");
 	destroy_buffer(ctx);
 }
 
@@ -132,7 +132,7 @@ void sha3_keccakf(uint64_t st[25])
 
 int sha3_init(sha3_ctx_t *c, int mdlen)
 {
-    printf("sha3_init : mdlen %d, lim 25\r\n",mdlen);
+  //  printf("sha3_init : mdlen %d, lim 25\r\n",mdlen);
     int i;
 
     for (i = 0; i < 25; i++)
@@ -148,7 +148,7 @@ int sha3_init(sha3_ctx_t *c, int mdlen)
 
 int sha3_update(sha3_ctx_t *c, const void *data, size_t len)
 {
-	printf("sha3_update : data buf len %ld  rsiz %d\r\n", len, c->rsiz);
+//	printf("sha3_update : data buf len %ld  rsiz %d\r\n", len, c->rsiz);
     size_t i;
     int j;
 
@@ -169,7 +169,7 @@ int sha3_update(sha3_ctx_t *c, const void *data, size_t len)
 
 int sha3_final(void *md, sha3_ctx_t *c)
 {
-    printf("sha3_final %d\r\n",c->mdlen);
+  //  printf("sha3_final %d\r\n",c->mdlen);
     int i;
 
     c->st.b[c->pt] ^= 0x06;

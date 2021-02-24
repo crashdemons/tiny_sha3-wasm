@@ -27,6 +27,7 @@ void test_sha3_api(){
 	for(int i = 0 ; i<512/8; i++){
 		printf("%d ", outbuf[i]);
 	}
+	printf("\r\n");
 
 // vs default method
     int mdlen = 512/8;
@@ -38,6 +39,7 @@ void test_sha3_api(){
 	for(int i = 0 ; i<512/8; i++){
 		printf("%d ", outbuf2[i]);
 	}
+	printf("\r\n");
 
 }
 
