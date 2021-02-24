@@ -102,12 +102,12 @@ var sha3 = {
     final: function(contextObject){
         var digestByteLen = contextObject.digest_size;
         var digestBuffer = this.internal.create_buffer(digestByteLen);
-        console.log("create buffer "+digestBuffer)
+        //console.log("create buffer "+digestBuffer)
         //this.internal.final(contextObject.context,digestBuffer,digestByteLen);
         this.internal.final(digestBuffer,contextObject.context);
         
         var digestBytes = this.internal.bytesFromBuffer(digestBuffer, digestByteLen);
-        console.log("destroying buffer "+digestBuffer)
+        //console.log("destroying buffer "+digestBuffer)
         this.internal.destroy_buffer(digestBuffer);
         return digestBytes;
     },
@@ -117,7 +117,7 @@ var sha3 = {
      * @param {Object} contextObject the context object for this hashing session
      */
     cleanup: function(contextObject){
-        //this.internal.cleanup(contextObject.context);
+        this.internal.cleanup(contextObject.context);
     },
     
     /**
