@@ -1862,6 +1862,17 @@ var ASM_CONSTS = {
   function _emscripten_memcpy_big(dest, src, num) {
       HEAPU8.copyWithin(dest, src, src + num);
     }
+
+  function _emscripten_get_heap_size() {
+      return HEAPU8.length;
+    }
+  
+  function abortOnCannotGrowMemory(requestedSize) {
+      abort('Cannot enlarge memory arrays to size ' + requestedSize + ' bytes (OOM). Either (1) compile with  -s INITIAL_MEMORY=X  with X higher than the current value ' + HEAP8.length + ', (2) compile with  -s ALLOW_MEMORY_GROWTH=1  which allows increasing the size at runtime, or (3) if you want malloc to return NULL (0) instead of this abort, compile with  -s ABORTING_MALLOC=0 ');
+    }
+  function _emscripten_resize_heap(requestedSize) {
+      abortOnCannotGrowMemory(requestedSize);
+    }
 var ASSERTIONS = true;
 
 
@@ -1892,7 +1903,8 @@ function intArrayToString(array) {
 
 
 var asmLibraryArg = {
-  "emscripten_memcpy_big": _emscripten_memcpy_big
+  "emscripten_memcpy_big": _emscripten_memcpy_big,
+  "emscripten_resize_heap": _emscripten_resize_heap
 };
 var asm = createWasm();
 /** @type {function(...*):?} */
@@ -1900,6 +1912,12 @@ var ___wasm_call_ctors = Module["___wasm_call_ctors"] = createExportWrapper("__w
 
 /** @type {function(...*):?} */
 var _version = Module["_version"] = createExportWrapper("version");
+
+/** @type {function(...*):?} */
+var _create_buffer = Module["_create_buffer"] = createExportWrapper("create_buffer");
+
+/** @type {function(...*):?} */
+var _destroy_buffer = Module["_destroy_buffer"] = createExportWrapper("destroy_buffer");
 
 /** @type {function(...*):?} */
 var _sha3_init = Module["_sha3_init"] = createExportWrapper("sha3_init");

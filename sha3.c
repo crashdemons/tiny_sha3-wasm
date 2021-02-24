@@ -12,6 +12,22 @@ int version(){
 	return 20150903;
 }
 
+
+static void *
+memalloc(const size_t size)
+{
+	return malloc(size);
+}
+
+void* create_buffer(size_t size){
+	return memalloc(size);
+}
+
+void destroy_buffer(void* buffer){
+	free(buffer);
+}
+
+
 void sha3_keccakf(uint64_t st[25])
 {
     // constants
