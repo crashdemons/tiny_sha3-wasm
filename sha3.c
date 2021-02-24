@@ -20,6 +20,12 @@ void destroy_buffer(uint8_t* p) {
   free(p);
 }
 
+sha3_ctx_t* sha3_init_stub(int mdlen){
+	sha3_ctx_t* ctx = (sha3_ctx_t*) create_buffer(sizeof(sha3_ctx_t));
+	memset(ctx, 0x0, sizeof(sha3_ctx_t));
+	return ctx;
+}
+
 
 
 void sha3_keccakf(uint64_t st[25])
@@ -113,6 +119,8 @@ void sha3_keccakf(uint64_t st[25])
 }
 
 // Initialize the context for SHA3
+
+
 
 int sha3_init(sha3_ctx_t *c, int mdlen)
 {

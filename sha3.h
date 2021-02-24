@@ -13,6 +13,7 @@
 #include <stddef.h>
 #include <stdint.h>
 #include <stdlib.h>
+#include <string.h>
 
 #ifndef KECCAKF_ROUNDS
 #define KECCAKF_ROUNDS 24
@@ -44,6 +45,8 @@ void destroy_buffer(uint8_t* p);
 
 // OpenSSL - like interfece
 EMSCRIPTEN_KEEPALIVE
+sha3_ctx_t* sha3_init_stub(int mdlen);
+
 int sha3_init(sha3_ctx_t *c, int mdlen);    // mdlen = hash output in bytes
 
 EMSCRIPTEN_KEEPALIVE
