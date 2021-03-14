@@ -10,9 +10,14 @@
 // read a hex string, return byte length or -1 on error.
 
 void test_sha3_api(){
+	printf("single input test (init,update,final)\r\n");
 	sha3_ctx_t* ctx = sha3_init_stub(512/8, SHA3_VARIANT_STANDARD);
 
-	const char* input = "test";
+	const char* input = "abcdefghbcdefghicdefghijdefghijkefghijklfghijklmghijklmnhijklmno";
+	printf("input: %s\r\n",input);
+	printf("expected output (sha3): \r\n236 225 248 135 43 70 4 55 151 153 188 169 192 243 83 147 21 180 123 168 102 212 33 163 158 202 26 214 97 149 109 238 39 54 35 248 165 210 67 46 154 36 64 72 179 209 19 136 162 65 38 124 221 42 33 27 93 214 116 130 252 14 139 165\r\n");
+
+	printf("actual outputs (2): \r\n");
 	void* inbuf = create_buffer(strlen(input)*sizeof(char));
 	memcpy(inbuf,input,strlen(input)*sizeof(char));
 
@@ -40,6 +45,18 @@ void test_sha3_api(){
 		printf("%d ", outbuf2[i]);
 	}
 	printf("\r\n");
+
+
+	printf("expected output (keccak3.0):\r\n62 18 46 218 243 115 152 35 28 250 202 76 124 33 108 157 102 213 184 153 236 29 122 198 23 196 12 114 97 144 106 69 252 1 97 122 2 30 93 163 189 141 65 130 105 91 92 183 133 162 130 55 203 177 103 89 14 52 113 142 86 216 170 184\r\n");
+	printf("actual outputs: \r\n");
+    sha3_init(&sha3, mdlen, SHA3_VARIANT_KECCAK3);
+    sha3_update(&sha3, inbuf, strlen(input));
+    sha3_final(outbuf2, &sha3);
+	for(int i = 0 ; i<512/8; i++){
+		printf("%d ", outbuf2[i]);
+	}
+	printf("\r\n");
+
 
 }
 
