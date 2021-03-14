@@ -10,7 +10,7 @@
 // read a hex string, return byte length or -1 on error.
 
 void test_sha3_api(){
-	sha3_ctx_t* ctx = sha3_init_stub(512/8);
+	sha3_ctx_t* ctx = sha3_init_stub(512/8, SHA3_VARIANT_STANDARD);
 
 	const char* input = "test";
 	void* inbuf = create_buffer(strlen(input)*sizeof(char));
@@ -33,7 +33,7 @@ void test_sha3_api(){
     int mdlen = 512/8;
     uint8_t* outbuf2 = create_buffer(64);
     sha3_ctx_t sha3;
-    sha3_init(&sha3, mdlen);
+    sha3_init(&sha3, mdlen, SHA3_VARIANT_STANDARD);
     sha3_update(&sha3, inbuf, strlen(input));
     sha3_final(outbuf2, &sha3);
 	for(int i = 0 ; i<512/8; i++){
@@ -124,7 +124,7 @@ int test_sha3()
         msg_len = test_readhex(msg, testvec[i][0], sizeof(msg));
         sha_len = test_readhex(sha, testvec[i][1], sizeof(sha));
 
-        sha3(msg, msg_len, buf, sha_len);
+        sha3(msg, msg_len, buf, sha_len, SHA3_VARIANT_STANDARD);
 
         if (memcmp(sha, buf, sha_len) != 0) {
             fprintf(stderr, "[%d] SHA3-%d, len %d test FAILED.\n",
