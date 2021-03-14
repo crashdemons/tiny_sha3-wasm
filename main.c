@@ -13,9 +13,9 @@ void test_sha3_api(){
 	printf("single input test (init,update,final)\r\n");
 	sha3_ctx_t* ctx = sha3_init_stub(512/8, SHA3_VARIANT_STANDARD);
 
-	const char* input = "abcdefghbcdefghicdefghijdefghijkefghijklfghijklmghijklmnhijklmno";
+	const char* input = "3Wh";
 	printf("input: %s\r\n",input);
-	printf("expected output (sha3): \r\n236 225 248 135 43 70 4 55 151 153 188 169 192 243 83 147 21 180 123 168 102 212 33 163 158 202 26 214 97 149 109 238 39 54 35 248 165 210 67 46 154 36 64 72 179 209 19 136 162 65 38 124 221 42 33 27 93 214 116 130 252 14 139 165\r\n");
+	printf("expected output (sha3): \r\n230 14 41 201 91 142 205 65 74 129 43 226 173 5 39 232 191 124 250 199 66 93 131 15 102 29 106 112 221 153 7 89 223 235 203 200 157 145 227 100 84 89 164 4 169 47 30 76 186 254 58 212 113 77 5 63 71 168 6 12 130 1 136 66\r\n");
 
 	printf("actual outputs (2): \r\n");
 	void* inbuf = create_buffer(strlen(input)*sizeof(char));
@@ -47,7 +47,7 @@ void test_sha3_api(){
 	printf("\r\n");
 
 
-	printf("expected output (keccak3.0):\r\n62 18 46 218 243 115 152 35 28 250 202 76 124 33 108 157 102 213 184 153 236 29 122 198 23 196 12 114 97 144 106 69 252 1 97 122 2 30 93 163 189 141 65 130 105 91 92 183 133 162 130 55 203 177 103 89 14 52 113 142 86 216 170 184\r\n");
+	printf("expected output (keccak3.0):\r\n99 97 147 22 49 142 12 46 175 122 91 244 240 80 152 132 90 209 255 87 227 198 220 67 178 246 97 161 47 196 200 110 208 143 57 201 181 60 180 112 62 141 58 127 23 56 186 30 144 26 42 115 110 151 251 148 207 52 116 113 173 69 181 137\r\n");
 	printf("actual outputs: \r\n");
     sha3_init(&sha3, mdlen, SHA3_VARIANT_KECCAK3);
     sha3_update(&sha3, inbuf, strlen(input));
