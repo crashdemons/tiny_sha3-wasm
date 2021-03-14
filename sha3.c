@@ -9,7 +9,7 @@
 // update the state with given number of rounds
 
 int version(){
-	return 20150903;
+	return 20210313;
 }
 
 uint8_t* create_buffer(size_t size) {
@@ -23,11 +23,11 @@ void destroy_buffer(void* p) {
   free(p);
 }
 
-sha3_ctx_t* sha3_init_stub(int mdlen){
+sha3_ctx_t* sha3_init_stub(int mdlen, int variant){
 //	printf("sha3_init_stub %d : sizeof sha3_ctx_t: %ld\r\n",mdlen, sizeof(sha3_ctx_t));
 	sha3_ctx_t* ctx = (sha3_ctx_t*) create_buffer(sizeof(sha3_ctx_t));
 	memset(ctx, 0x0, sizeof(sha3_ctx_t));
-	sha3_init(ctx,mdlen);
+	sha3_init(ctx,mdlen, variant);
 	return ctx;
 }
 void sha3_cleanup_stub(sha3_ctx_t* ctx){
@@ -130,7 +130,7 @@ void sha3_keccakf(uint64_t st[25])
 
 
 
-int sha3_init(sha3_ctx_t *c, int mdlen)
+int sha3_init(sha3_ctx_t *c, int mdlen, int variant)
 {
   //  printf("sha3_init : mdlen %d, lim 25\r\n",mdlen);
     int i;
@@ -141,6 +141,14 @@ int sha3_init(sha3_ctx_t *c, int mdlen)
     c->rsiz = 200 - 2 * mdlen;
     c->pt = 0;
 
+    switch(variant){
+	case SHA3_VARIANT_KECCAK3:
+	    c->keccak_padding_value = variant;
+	    break;
+	default:
+	    c->keccak_padding_value = SHA3_VARIANT_STANDARD;
+	    break;
+    }
     return 1;
 }
 
@@ -172,7 +180,7 @@ int sha3_final(void *md, sha3_ctx_t *c)
   //  printf("sha3_final %d\r\n",c->mdlen);
     int i;
 
-    c->st.b[c->pt] ^= 0x06;
+    c->st.b[c->pt] ^= c->keccak_padding_value;
     c->st.b[c->rsiz - 1] ^= 0x80;
     sha3_keccakf(c->st.q);
 
@@ -185,11 +193,11 @@ int sha3_final(void *md, sha3_ctx_t *c)
 
 // compute a SHA-3 hash (md) of given byte length from "in"
 
-void *sha3(const void *in, size_t inlen, void *md, int mdlen)
+void *sha3(const void *in, size_t inlen, void *md, int mdlen, int variant)
 {
     sha3_ctx_t sha3;
 
-    sha3_init(&sha3, mdlen);
+    sha3_init(&sha3, mdlen, variant);
     sha3_update(&sha3, in, inlen);
     sha3_final(md, &sha3);
 

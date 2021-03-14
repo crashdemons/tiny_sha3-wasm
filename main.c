@@ -10,9 +10,14 @@
 // read a hex string, return byte length or -1 on error.
 
 void test_sha3_api(){
-	sha3_ctx_t* ctx = sha3_init_stub(512/8);
+	printf("single input test (init,update,final)\r\n");
+	sha3_ctx_t* ctx = sha3_init_stub(512/8, SHA3_VARIANT_STANDARD);
 
-	const char* input = "test";
+	const char* input = "3Wh";
+	printf("input: %s\r\n",input);
+	printf("expected output (sha3): \r\n230 14 41 201 91 142 205 65 74 129 43 226 173 5 39 232 191 124 250 199 66 93 131 15 102 29 106 112 221 153 7 89 223 235 203 200 157 145 227 100 84 89 164 4 169 47 30 76 186 254 58 212 113 77 5 63 71 168 6 12 130 1 136 66\r\n");
+
+	printf("actual outputs (2): \r\n");
 	void* inbuf = create_buffer(strlen(input)*sizeof(char));
 	memcpy(inbuf,input,strlen(input)*sizeof(char));
 
@@ -33,13 +38,25 @@ void test_sha3_api(){
     int mdlen = 512/8;
     uint8_t* outbuf2 = create_buffer(64);
     sha3_ctx_t sha3;
-    sha3_init(&sha3, mdlen);
+    sha3_init(&sha3, mdlen, SHA3_VARIANT_STANDARD);
     sha3_update(&sha3, inbuf, strlen(input));
     sha3_final(outbuf2, &sha3);
 	for(int i = 0 ; i<512/8; i++){
 		printf("%d ", outbuf2[i]);
 	}
 	printf("\r\n");
+
+
+	printf("expected output (keccak3.0):\r\n80 45 28 176 25 100 99 246 67 223 39 101 121 29 166 104 62 46 235 159 75 252 198 224 181 101 97 71 219 152 68 150 117 114 87 255 48 85 81 207 230 72 193 242 87 130 88 139 92 188 4 243 252 242 39 53 107 39 230 79 232 14 211 228\r\n");
+	printf("actual outputs: \r\n");
+    sha3_init(&sha3, mdlen, SHA3_VARIANT_KECCAK3);
+    sha3_update(&sha3, inbuf, strlen(input));
+    sha3_final(outbuf2, &sha3);
+	for(int i = 0 ; i<512/8; i++){
+		printf("%d ", outbuf2[i]);
+	}
+	printf("\r\n");
+
 
 }
 
@@ -124,7 +141,7 @@ int test_sha3()
         msg_len = test_readhex(msg, testvec[i][0], sizeof(msg));
         sha_len = test_readhex(sha, testvec[i][1], sizeof(sha));
 
-        sha3(msg, msg_len, buf, sha_len);
+        sha3(msg, msg_len, buf, sha_len, SHA3_VARIANT_STANDARD);
 
         if (memcmp(sha, buf, sha_len) != 0) {
             fprintf(stderr, "[%d] SHA3-%d, len %d test FAILED.\n",

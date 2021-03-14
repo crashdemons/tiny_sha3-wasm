@@ -36,7 +36,9 @@ async function debugBuffer(prefix,pBuffer,nBufLen){
 }
 function clickHash(){
     var input = document.getElementById('input');
+    var variantSelect = document.getElementById('variant');
     var sizeSelect = document.getElementById('size');
+    var variantValue = +(variantSelect.value);
     var digestSize = +(sizeSelect.value);
     var inputText = input.value;
     debugClear();
@@ -44,24 +46,47 @@ function clickHash(){
         debug("API not ready");
     }else{
         debug("API ready");
-        hashStringDebug(inputText,digestSize);
+        hashStringDebug(inputText,digestSize,variantValue);
     }
 }
-async function hashStringDebug(inputText,digestSize){
+async function hashStringDebug(inputText,digestSize,variantValue){
     debug("Sha3-wasm library version: "+sha3.version());
-    debug("*Result = "+sha3.digestHex(inputText,digestSize));
+    debug("*Result = "+sha3.digestHex(inputText,digestSize,variantValue));
     debug("*Done");
+    
+    debug("***Benchmarking...");
+
+    var bench_count = 100000
+    var bench_time = 0;
+  
+    console.log(inputText,digestSize,variantValue)
+
+    for(var i=0; i< bench_count; i++){
+	var t0 = performance.now()
+        sha3.digestHex(inputText,digestSize,variantValue);
+	var t1 = performance.now()
+	var td = t1 - t0;
+	bench_time += td;
+   }
+
+   var bench_average = bench_time / bench_count;
+
+   debug("* Average of "+bench_average+"ms (sample size:"+bench_count+")");
 }
 </script>
 
     </head>
     <body>
         <input type="text" id="input" value="test">
+        <select id="variant">
+            <option value="1">Keccak3</option>
+            <option value="6" selected="selected">Sha3</option>
+        </select>
         <select id="size">
-            <option value="224">Sha3-224</option>
-            <option value="256">Sha3-256</option>
-            <option value="384">Sha3-384</option>
-            <option value="512" selected="selected">Sha3-512</option>
+            <option value="224">224-bit</option>
+            <option value="256">256-bit</option>
+            <option value="384">384-bit</option>
+            <option value="512" selected="selected">512-bit</option>
         </select>
         <button onclick="clickHash()">Calculate Hash</button>
         <hr>
@@ -69,6 +94,7 @@ async function hashStringDebug(inputText,digestSize){
         <hr>
         <div>Known Sha3-512 result for "test": 9ece086e9bac491fac5c1d1046ca11d737b92a2b2ebd93f005d7b710110c0a678288166e7fbe796883a4f2e9b3ca9f484f521d0ce464345cc1aec96779149c14</div>
         <div>Known Sha3-256 result for "test": 36f028580bb02cc8272a9a020f4200e346e276ae664e45ee80745574e2f5ab80</div>
+        <div>Known Keccak3-512 result for "test": 1e2e9fc2002b002d75198b7503210c05a1baac4560916a3c6d93bcce3a50d7f00fd395bf1647b9abb8d1afcc9c76c289b0c9383ba386a956da4b38934417789e</div>
     </body>
 </html>
 
