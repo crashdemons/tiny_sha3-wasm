@@ -140,6 +140,7 @@ int sha3_init(sha3_ctx_t *c, int mdlen)
     c->mdlen = mdlen;
     c->rsiz = 200 - 2 * mdlen;
     c->pt = 0;
+    c->keccak_padding_value = 0x06;
 
     return 1;
 }
@@ -172,7 +173,7 @@ int sha3_final(void *md, sha3_ctx_t *c)
   //  printf("sha3_final %d\r\n",c->mdlen);
     int i;
 
-    c->st.b[c->pt] ^= 0x06;
+    c->st.b[c->pt] ^= c->keccak_padding_value;
     c->st.b[c->rsiz - 1] ^= 0x80;
     sha3_keccakf(c->st.q);
 

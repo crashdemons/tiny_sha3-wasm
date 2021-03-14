@@ -32,6 +32,7 @@ typedef struct {
         uint64_t q[25];                     // 64-bit words
     } st;
     int pt, rsiz, mdlen;                    // these don't overflow
+    int keccak_padding_value;               // 0x01 for keccak 3.0, 0x06 for sha3
 } sha3_ctx_t;
 
 // Compression function.
