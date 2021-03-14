@@ -80,6 +80,11 @@ var sha3 = {
         }
     },
     
+    variants:{
+        SHA3_VARIANT_STANDARD: 0x06,
+        SHA3_VARIANT_KECCAK3: 0x01
+    },
+    
     /**
      * Checks if Sha3 support is ready (WASM Module loaded)
      * @return {Boolean}
@@ -94,7 +99,8 @@ var sha3 = {
      * @param {Number} digest_size the number of bits for the digest size (512 or 256). 512 is default.
      * @return {Object} the context object for this hashing session. should only be used to hash one data source.
      */
-    init: function(digest_size){
+    init: function(digest_size,variant){
+        if(typeof variant==="undefined" || variant!==this.variants.SHA3_VARIANT_KECCAK3) variant=this.variants.SHA3_VARIANT_STANDARD;
         
         if(typeof digest_size==="undefined"){
             digest_size = 512/8;
@@ -111,8 +117,9 @@ var sha3 = {
                 digest_size = 512/8;
         }
         return {
+            variant: variant,
             digest_size : digest_size,
-            context: this.internal.init(digest_size)
+            context: this.internal.init(digest_size,variant)
         };
     },
     
@@ -170,9 +177,9 @@ var sha3 = {
      * @param {Number} digest_size the number of bits for the digest size (512 or 256). 512 is default.
      * @return {Uint8Array} an array of bytes representing the raw digest ("hash") value.
      */
-    digest: function (input, digest_size) {
+    digest: function (input, digest_size, variant) {
         input = this.internal.inputToBytes(input);
-        var ctx = this.init(digest_size);
+        var ctx = this.init(digest_size, variant);
         this.update(ctx,input);
         var bytes = this.final(ctx);
         this.cleanup(ctx);
@@ -185,8 +192,8 @@ var sha3 = {
      * @param {Number} digest_size the number of bits for the digest size (512 or 256). 512 is default.
      * @return {String} a hexadecimal representation of the digest ("hash") bytes.
      */
-    digestHex: function (input, digest_size) {
-        var bytes = this.digest(input,digest_size);
+    digestHex: function (input, digest_size, variant) {
+        var bytes = this.digest(input,digest_size, variant);
         return this.internal.toHex(bytes);
     }
 };
@@ -195,7 +202,7 @@ createSha3Module().then(async module => {
     sha3.version= module.cwrap('version', 'number', []);
     sha3.internal.create_buffer= module.cwrap('create_buffer', 'number', ['number']);
     sha3.internal.destroy_buffer= module.cwrap('destroy_buffer', '', ['number']);
-    sha3.internal.init= module.cwrap('sha3_init_stub', '', ['number']);
+    sha3.internal.init= module.cwrap('sha3_init_stub', '', ['number','number']);
     sha3.internal.update= module.cwrap('sha3_update', 'number', ['number','number','number']);
     sha3.internal.final= module.cwrap('sha3_final', 'number', ['number','number']);
     sha3.internal.cleanup= module.cwrap('sha3_cleanup_stub', '', ['number']);
