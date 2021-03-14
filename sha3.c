@@ -9,7 +9,7 @@
 // update the state with given number of rounds
 
 int version(){
-	return 20150903;
+	return 20210313;
 }
 
 uint8_t* create_buffer(size_t size) {
