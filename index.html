@@ -53,6 +53,25 @@ async function hashStringDebug(inputText,digestSize,variantValue){
     debug("Sha3-wasm library version: "+sha3.version());
     debug("*Result = "+sha3.digestHex(inputText,digestSize,variantValue));
     debug("*Done");
+    
+    debug("***Benchmarking...");
+
+    var bench_count = 100000
+    var bench_time = 0;
+  
+    console.log(inputText,digestSize,variantValue)
+
+    for(var i=0; i< bench_count; i++){
+	var t0 = performance.now()
+        sha3.digestHex(inputText,digestSize,variantValue);
+	var t1 = performance.now()
+	var td = t1 - t0;
+	bench_time += td;
+   }
+
+   var bench_average = bench_time / bench_count;
+
+   debug("* Average of "+bench_average+"ms (sample size:"+bench_count+")");
 }
 </script>
 
