@@ -2,6 +2,8 @@
 Very small, readable implementation of the FIPS 202 and SHA3 hash function.
 Public domain.  Rebuilt for Webassembly (WASM) support.
 
+As of recent versions this project also has support for Keccak 3 with results compliance with [some online sources](https://asecuritysite.com/encryption/s3?m=test).
+
 live demo: https://crashdemons.github.io/tiny_sha3-wasm
 
 Building WASM
